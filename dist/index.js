@@ -36956,10 +36956,37 @@ const {
 
 /* harmony default export */ const modules = ((/* unused pure expression or super */ null && (tslib)));
 
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(1017);
 // EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
 var core = __nccwpck_require__(2186);
+// EXTERNAL MODULE: ./node_modules/actions-parsers/dist/main.js
+var main = __nccwpck_require__(3295);
+// EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
+var lib = __nccwpck_require__(5568);
+;// CONCATENATED MODULE: ./src/config.ts
+
+
+
+const oidcLoginConfig = lib.Record({
+    cloudUrl: lib.String,
+    organizationName: lib.String,
+    requestedTokenType: lib.String,
+    scope: lib.String.Or(lib.Undefined),
+    expiration: lib.Number.Or(lib.Undefined),
+    exportEnvironmentVariables: lib.Boolean,
+});
+function makeOidcLoginConfig() {
+    return oidcLoginConfig.validate({
+        organizationName: (0,core.getInput)('organization', { required: true }),
+        requestedTokenType: (0,core.getInput)('requested-token-type', { required: true }),
+        scope: (0,core.getInput)('scope') || undefined,
+        expiration: (0,main.getNumberInput)('token-expiration') || undefined,
+        cloudUrl: (0,core.getInput)('cloud-url') || 'https://api.pulumi.com',
+        exportEnvironmentVariables: (0,core.getBooleanInput)('export-environment-variables') || true,
+    });
+}
+
+// EXTERNAL MODULE: external "path"
+var external_path_ = __nccwpck_require__(1017);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/bind.js
 
 
@@ -41618,31 +41645,58 @@ axios.default = axios;
 // this module should only have a default export
 /* harmony default export */ const lib_axios = (axios);
 
-// EXTERNAL MODULE: ./node_modules/actions-parsers/dist/main.js
-var main = __nccwpck_require__(3295);
-// EXTERNAL MODULE: ./node_modules/runtypes/lib/index.js
-var lib = __nccwpck_require__(5568);
-;// CONCATENATED MODULE: ./src/config.ts
+;// CONCATENATED MODULE: ./src/oauth2.ts
 
 
 
-const oidcLoginConfig = lib.Record({
-    cloudUrl: lib.String,
-    organizationName: lib.String,
-    requestedTokenType: lib.String,
-    scope: lib.String.Or(lib.Undefined),
-    expiration: lib.Number.Or(lib.Undefined),
-    exportEnvironmentVariables: lib.Boolean,
-});
-function makeOidcLoginConfig() {
-    var _a, _b, _c, _d;
-    return oidcLoginConfig.validate({
-        organizationName: (0,core.getInput)('organization', { required: true }),
-        requestedTokenType: (0,core.getInput)('requested-token-type', { required: true }),
-        scope: (_a = (0,core.getInput)('scope')) !== null && _a !== void 0 ? _a : undefined,
-        expiration: (_b = (0,main.getNumberInput)('token-expiration')) !== null && _b !== void 0 ? _b : undefined,
-        cloudUrl: (_c = (0,core.getInput)('cloud-url')) !== null && _c !== void 0 ? _c : 'https://api.pulumi.com',
-        exportEnvironmentVariables: (_d = (0,core.getBooleanInput)('export-environment-variables')) !== null && _d !== void 0 ? _d : true,
+function buildPulumiAudience(organizationName) {
+    return `urn:pulumi:org:${organizationName}`;
+}
+function exchangeIdToken(config, audience, subjectToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const url = (0,external_path_.join)(config.cloudUrl, 'api', 'oauth', 'token');
+        const body = {
+            audience,
+            grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+            subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
+            requested_token_type: config.requestedTokenType,
+            subject_token: subjectToken,
+        };
+        if (config.expiration !== undefined) {
+            body.expiration = config.expiration;
+        }
+        if (config.scope !== undefined) {
+            body.scope = config.scope;
+        }
+        try {
+            const res = yield lib_axios.post(url, body);
+            const oauth2Response = res.data;
+            return oauth2Response.access_token;
+        }
+        catch (error) {
+            const err = error;
+            const res = err.response;
+            if (res === undefined) {
+                throw error;
+            }
+            throw new Error(`Invalid response from token exchange ${res.status}: ${res.statusText} (${res.data.error}: ${res.data.error_description})`);
+        }
+    });
+}
+
+;// CONCATENATED MODULE: ./src/gh.ts
+
+
+function setOutputs(accessToken, exportEnvironmentVariables) {
+    core.setSecret(accessToken);
+    core.setOutput('pulumi-access-token', accessToken);
+    if (exportEnvironmentVariables) {
+        core.exportVariable('PULUMI_ACCESS_TOKEN', accessToken);
+    }
+}
+function fetchOIDCToken(audience) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return core.getIDToken(audience);
     });
 }
 
@@ -41659,48 +41713,15 @@ const main_main = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     const accessToken = yield ensureAccessToken(oidcConfig.value);
     core.info('OIDC token exchange performed successfully.');
-    core.setSecret(accessToken);
-    core.setOutput('pulumi-access-token', accessToken);
-    if (oidcConfig.value.exportEnvironmentVariables) {
-        core.exportVariable('PULUMI_ACCESS_TOKEN', accessToken);
-    }
+    setOutputs(accessToken, oidcConfig.value.exportEnvironmentVariables);
 });
 const ensureAccessToken = (config) => __awaiter(void 0, void 0, void 0, function* () {
-    const audience = `urn:pulumi:org:${config.organizationName}`;
+    const audience = buildPulumiAudience(config.organizationName);
     core.debug(`Fetching OIDC Token for ${audience}`);
-    const idToken = yield core.getIDToken(audience);
+    const idToken = yield fetchOIDCToken(audience);
     core.debug('Exchanging oidc token for pulumi token');
     const accessToken = yield exchangeIdToken(config, audience, idToken);
     return accessToken;
-});
-const exchangeIdToken = (config, audience, subjectToken) => __awaiter(void 0, void 0, void 0, function* () {
-    const url = (0,external_path_.join)(config.cloudUrl, 'api', 'oauth', 'token');
-    const body = {
-        audience,
-        grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-        subject_token_type: 'urn:ietf:params:oauth:token-type:id_token',
-        requested_token_type: config.requestedTokenType,
-        subject_token: subjectToken,
-    };
-    if (config.expiration !== undefined) {
-        body.expiration = config.expiration;
-    }
-    if (config.scope !== undefined) {
-        body.scope = config.scope;
-    }
-    try {
-        const res = yield lib_axios.post(url, body);
-        const oauth2Response = res.data;
-        return oauth2Response.access_token;
-    }
-    catch (error) {
-        const err = error;
-        const res = err.response;
-        if (res === undefined) {
-            throw error;
-        }
-        throw new Error(`Invalid response from token exchange ${res.status}: ${res.statusText} (${res.data.error}: ${res.data.error_description})`);
-    }
 });
 main_main()
     .then(() => {
