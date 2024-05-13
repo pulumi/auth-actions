@@ -1,0 +1,30 @@
+name: Pulumi
+on:
+  push:
+    branches:
+      - main
+jobs:
+  up:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup Node LTS ✨
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Performing authentication 🔑
+        uses: pulumi/auth@v1
+        with:
+          organization: sample
+          requested-token-type: urn:pulumi:token-type:access_token:organization
+
+      - name: Applying infrastructure 🚀
+        uses: pulumi/actions@v4
+        with:
+          command: up
+          stack-name: dev

@@ -1,0 +1,53 @@
+name: 'Pulumi Auth Action'
+author: Pulumi
+description: |-
+  Authenticate to Pulumi Cloud from GitHub Actions via OpenID Connect.
+branding:
+  icon: upload-cloud
+  color: purple
+inputs:
+  organization:
+    description: The name of the pulumi organization
+    required: true
+  requested-token-type:
+    description: |
+      Type of access token type to request:
+        - urn:pulumi:token-type:access_token:organization
+        - urn:pulumi:token-type:access_token:team
+        - urn:pulumi:token-type:access_token:personal
+    required: false
+  scope:
+    description: |
+      The scope to use when requesting the Pulumi access token, according 
+      to the token type:
+        - For personal access tokens: `user:USER_NAME`
+        - For team access tokens: `team:TEAM_NAME`
+        - For organization access tokens, no scope is required
+    required: false
+  token-expiration:
+    description: |
+      The token expiration requested. It is up to the Pulumi authorization server
+      to grant or reduce it.
+    required: false
+  export-environment-variables:
+    default: 'true'
+    required: false
+    description: |
+      If true, this action will export the Pulumi credentials as 
+      environment variables to be consumed by downstream step
+  cloud-url:
+    description: 'A cloud URL to log in to'
+    required: false
+outputs:
+  pulumi-access-token:
+    description: Pulumi access token
+runs:
+  # TODO upgrade to node16 by 1 Nov 2022.
+  #
+  # We will retain node12 requirement 6 months after its EOL (30 Apr
+  # 2022), unless something forces us to upgrade.
+  #
+  # Trying to upgrade in July 2022 broke our users that depend on
+  # GitHub Enterprise versions < 3.4
+  using: 'node20'
+  main: 'dist/index.js'
