@@ -46,9 +46,9 @@ The action can be configured with the following arguments:
 
 - `scope` (optional) - The scope to use when requesting the Pulumi access token, 
     according to the token type:
-        - For personal access tokens: `user:USER_NAME`
-        - For team access tokens: `team:TEAM_NAME`
-        - For organization access tokens, no scope is required
+    - For personal access tokens: `user:USER_NAME`
+    - For team access tokens: `team:TEAM_NAME`
+    - For organization access tokens, no scope is required
 
 - `token-expiration` (optional) - The token expiration in seconds requested. It 
     is up to the Pulumi authorization server to grant or reduce it.
