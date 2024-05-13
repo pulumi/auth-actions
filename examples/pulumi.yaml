@@ -15,10 +15,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: lts/*
-          cache: yarn
+          cache: npm
 
       - name: Performing authentication 🔑
-        uses: pulumi/auth@v1
+        uses: pulumi/auth-actions@v1
         with:
           organization: sample
           requested-token-type: urn:pulumi:token-type:access_token:organization
