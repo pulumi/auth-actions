@@ -1,4 +1,4 @@
-import * as fs from "fs"
+import * as fs from 'fs';
 
 // See https://github.com/vercel/ncc/issues/642
 

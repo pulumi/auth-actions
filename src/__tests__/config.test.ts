@@ -1,6 +1,6 @@
 import { makeOidcLoginConfig } from '../config';
 
-function setupMockedConfig(config: Record<string, string>) {
+function setupMockedConfig(config: Record<string, string>): void {
   Object.entries(config).forEach(([key, value]) => {
     process.env[`INPUT_${key.replace(/ /g, '_').toUpperCase()}`] = value;
   });
@@ -10,8 +10,8 @@ describe('config.ts', () => {
   beforeEach(() => {
     jest.resetModules();
   });
-  
-  it('should validate a configuration', async () => {
+
+  it('should validate a configuration', () => {
     const config: Record<string, string> = {
       organization: 'organization-name',
       'requested-token-type': 'urn:pulumi:token-type:access_token:organization',

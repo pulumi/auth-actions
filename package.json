@@ -7,44 +7,44 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf coverage build tmp dist",
-    "prebuild": "yarn run clean",
+    "prebuild": "npm run clean",
     "build": "ncc build src/main.ts -e typescript -o dist --source-map",
     "postbuild": "node scripts/replace-ts.js",
-    "lint": "eslint .",
     "test": "jest --coverage src/**/*",
     "test:watch": "jest --watch",
-    "postinstall": "husky install .github/husky"
+    "postinstall": "husky install .github/husky",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint .",
+    "lint": "npm run eslint && npm run check-types",
+    "lint:fix": "eslint . --fix && prettier --write . && npm run check-types"
   },
   "lint-staged": {
     "src/**/*.{yaml,yml}": "prettier --write",
     "src/**/*.{js,ts}": "eslint --cache --fix",
+    "src/**/*.ts": "tsc --noemit",
     "*.md": "prettier --write"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.0.2",
-    "@eslint/js": "^9.1.1",
+    "@eslint/js": "^9.2.0",
     "@types/axios": "^0.14.0",
     "@types/jest": "~27.5.0",
     "@types/node": "~20.4.9",
-    "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "eslint": "^8.0.1",
-    "eslint-config-standard-with-typescript": "^43.0.1",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
-    "eslint-plugin-promise": "^6.0.0",
+    "eslint": "^8.57.0",
     "globals": "^15.0.0",
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "jest-playback": "^3.0.0",
     "lint-staged": "^15.2.2",
     "prettier": "^2.8.8",
-    "rimraf": "~5.0.1"
+    "rimraf": "~5.0.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
     "actions-parsers": "^1.0.2",
     "axios": "^1.6.8",
-    "runtypes": "^6.7.0",
-    "typescript": "*"
+    "runtypes": "^6.7.0"
   }
 }
