@@ -55,8 +55,9 @@ The action can be configured with the following arguments:
 
 - `export-environment-variables` (optional) - By default the action will export
     the `PULUMI_ACCESS_TOKEN` environment variable. If `false`, it will only return 
-    the token throught the action's outputs.
+    the token through the action's outputs.
 
-By default, this action will try to authenticate Pulumi with 
+
+- `cloud-url` (optional) - By default the action will try to authenticate Pulumi with 
 [Pulumi Cloud](https://app.pulumi.com/). If you need to specify an alternative backend, 
-you can do it via the `cloud-url` argument.
+you can do it via this argument.
