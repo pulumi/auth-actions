@@ -48,7 +48,7 @@ The action can be configured with the following arguments:
     according to the token type:
     - For personal access tokens: `user:USER_NAME`
     - For team access tokens: `team:TEAM_NAME`
-    - For organization access tokens, the `admin` scope can be set to request a token with admin privileges (the authorization policy should explicitly grant the incresed permissions)
+    - For organization access tokens, the `admin` scope can be set to request a token with admin privileges (the authorization policy should explicitly grant the increased permissions)
 
 - `token-expiration` (optional) - The token expiration in seconds requested. It 
     is up to the Pulumi authorization server to grant or reduce it.
