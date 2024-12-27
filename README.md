@@ -48,7 +48,7 @@ The action can be configured with the following arguments:
     according to the token type:
     - For personal access tokens: `user:USER_NAME`
     - For team access tokens: `team:TEAM_NAME`
-    - For organization access tokens, no scope is required
+    - For organization access tokens, the `admin` scope can be set to request a token with admin privileges (the authorization policy should explicitly grant the incresed permissions)
 
 - `token-expiration` (optional) - The token expiration in seconds requested. It 
     is up to the Pulumi authorization server to grant or reduce it.
@@ -56,7 +56,6 @@ The action can be configured with the following arguments:
 - `export-environment-variables` (optional) - By default the action will export
     the `PULUMI_ACCESS_TOKEN` environment variable. If `false`, it will only return 
     the token through the action's outputs.
-
 
 - `cloud-url` (optional) - By default the action will try to authenticate Pulumi with 
 [Pulumi Cloud](https://app.pulumi.com/). If you need to specify an alternative backend, 
