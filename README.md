@@ -35,6 +35,9 @@ jobs:
           stack-name: org-name/stack-name
 ```
 
+> Note that specific permisions are required for the action to be able to request
+> an id-token. For more info see the [GitHub documentation](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings)
+
 This will check out the existing directory, then fetch a Pulumi access token
 for the `contoso` organization and run `pulumi preview`.
 
