@@ -10,10 +10,15 @@ your workflows removing the need of hardcoding credentials on your repos.
 
 ```yaml
 name: Pulumi
+
 on:
   push:
     branches:
       - master
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   up:
     name: Preview
