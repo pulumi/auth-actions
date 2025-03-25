@@ -2,6 +2,9 @@
 
 ## HEAD (Unreleased)
 
+- fix: oauth url on windows
+  ([#53](https://github.com/pulumi/auth-actions/pull/53))
+
 ---
 
 ## 1.0.0 (2024-05-13)

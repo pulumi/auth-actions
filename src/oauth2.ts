@@ -1,4 +1,3 @@
-import { join } from 'path';
 import axios, { type AxiosResponse, type AxiosError } from 'axios';
 import { type OidcLoginConfig } from './config';
 
@@ -29,7 +28,7 @@ export async function exchangeIdToken(
   audience: string,
   subjectToken: string,
 ): Promise<string> {
-  const url = join(config.cloudUrl, 'api', 'oauth', 'token');
+  const url = new URL('api/oauth/token', config.cloudUrl).toString();
 
   const body: PulumiOauth2Request = {
     audience,
