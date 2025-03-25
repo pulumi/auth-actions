@@ -36985,8 +36985,6 @@ function makeOidcLoginConfig() {
     });
 }
 
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(1017);
 ;// CONCATENATED MODULE: ./node_modules/axios/lib/helpers/bind.js
 
 
@@ -41648,13 +41646,12 @@ axios.default = axios;
 ;// CONCATENATED MODULE: ./src/oauth2.ts
 
 
-
 function buildPulumiAudience(organizationName) {
     return `urn:pulumi:org:${organizationName}`;
 }
 function exchangeIdToken(config, audience, subjectToken) {
     return __awaiter(this, void 0, void 0, function* () {
-        const url = (0,external_path_.join)(config.cloudUrl, 'api', 'oauth', 'token');
+        const url = new URL('api/oauth/token', config.cloudUrl).toString();
         const body = {
             audience,
             grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
