@@ -47,8 +47,8 @@
   },
   "dependencies": {
     "@actions/core": "^1.10.1",
+    "@pulumi/actions-helpers": "^0.1.0",
     "actions-parsers": "^1.0.2",
-    "axios": "^1.6.8",
     "runtypes": "^6.7.0"
   }
 }
