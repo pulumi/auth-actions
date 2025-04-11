@@ -1,7 +1,25 @@
+import * as rt from 'runtypes';
 import * as core from '@actions/core';
-import { type OidcLoginConfig, makeOidcLoginConfig } from './config';
-import { exchangeIdToken, buildPulumiAudience } from './oauth2';
-import { setOutputs, fetchOIDCToken } from './gh';
+import { getNumberInput } from 'actions-parsers';
+import {
+  type OidcLoginConfig,
+  OidcLoginConfigRuntype,
+  ensureAccessToken,
+} from '@pulumi/actions-helpers/auth';
+
+function makeOidcLoginConfig(): rt.Result<OidcLoginConfig> {
+  return OidcLoginConfigRuntype.validate({
+    organizationName: core.getInput('organization', { required: true }),
+    requestedTokenType: core.getInput('requested-token-type', {
+      required: true,
+    }),
+    scope: core.getInput('scope') || undefined,
+    expiration: getNumberInput('token-expiration') || undefined,
+    cloudUrl: core.getInput('cloud-url') || 'https://api.pulumi.com',
+    exportEnvironmentVariables:
+      core.getBooleanInput('export-environment-variables') || true,
+  });
+}
 
 const main = async (): Promise<void> => {
   const oidcConfig = makeOidcLoginConfig();
@@ -12,19 +30,12 @@ const main = async (): Promise<void> => {
   const accessToken = await ensureAccessToken(oidcConfig.value);
   core.info('OIDC token exchange performed successfully.');
 
-  setOutputs(accessToken, oidcConfig.value.exportEnvironmentVariables);
-};
+  core.setSecret(accessToken);
+  core.setOutput('pulumi-access-token', accessToken);
 
-const ensureAccessToken = async (config: OidcLoginConfig): Promise<string> => {
-  const audience = buildPulumiAudience(config.organizationName);
-
-  core.debug(`Fetching OIDC Token for ${audience}`);
-  const idToken = await fetchOIDCToken(audience);
-
-  core.debug('Exchanging oidc token for pulumi token');
-  const accessToken = await exchangeIdToken(config, audience, idToken);
-
-  return accessToken;
+  if (oidcConfig.value.exportEnvironmentVariables) {
+    core.exportVariable('PULUMI_ACCESS_TOKEN', accessToken);
+  }
 };
 
 main()
