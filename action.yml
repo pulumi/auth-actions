@@ -42,5 +42,5 @@ outputs:
   pulumi-access-token:
     description: Pulumi access token
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
