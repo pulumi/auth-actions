@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 2.1.0 (2026-05-29)
+
 - fix: Build with rollup instead of ncc to fix a load crash (`require is not
   defined in ES module scope`) that broke v2.0.0 for all consumers
   ([#63](https://github.com/pulumi/auth-actions/pull/63))
