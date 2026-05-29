@@ -7,7 +7,7 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
 export default tseslint.config(
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', 'rollup.config.ts'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.strict,
