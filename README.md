@@ -1,6 +1,6 @@
 # Pulumi GitHub Auth Actions
 
-Pulumi's GitHub Auth Actions automatically generate and exchange GitHub's 
+Pulumi's GitHub Auth Actions automatically generates and exchanges GitHub's 
 OpenID Connect tokens for Pulumi Access Tokens, making them available to 
 your workflows and removing the need to hardcode credentials in your repos.
 
