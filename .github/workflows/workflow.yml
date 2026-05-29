@@ -46,3 +46,39 @@ jobs:
 
     outputs:
       changed: ${{ steps.changes.outputs.dist }}
+
+  smoke-test:
+    name: Smoke test built action loads on node24
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm i
+
+      - run: npm run build
+
+      # Runs the built bundle on the same Node version as the action runtime.
+      # With no inputs the action must reach its input validation and report
+      # the missing 'organization' input -- NOT crash on load. This guards
+      # against module-format / bundling regressions (e.g. ESM/CJS mismatch,
+      # unresolved dependencies) that otherwise only surface when consumers
+      # run the published action.
+      - name: Assert action loads and runs
+        run: |
+          set -euo pipefail
+          output="$(node dist/index.js 2>&1 || true)"
+          echo "${output}"
+          if echo "${output}" | grep -qiE "require is not defined|Cannot find module|ERR_MODULE_NOT_FOUND|SyntaxError"; then
+            echo "::error::Built action failed to load on node24 (module/bundle regression)." >&2
+            exit 1
+          fi
+          if ! echo "${output}" | grep -q "Input required and not supplied: organization"; then
+            echo "::error::Action did not reach input validation -- it may have failed to load." >&2
+            exit 1
+          fi
+          echo "OK: action loaded and ran on node24."
