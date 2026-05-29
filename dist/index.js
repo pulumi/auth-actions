@@ -32247,7 +32247,9 @@ function ensureAccessToken(config) {
 function makeOidcLoginConfig() {
     return _notfoundconfig.OidcLoginConfigRuntype.validate({
         organizationName: core.getInput('organization', { required: true }),
-        requestedTokenType: core.getInput('requested-token-type', { required: true }),
+        requestedTokenType: core.getInput('requested-token-type', {
+            required: true,
+        }),
         scope: core.getInput('scope') || undefined,
         expiration: (0,main.getNumberInput)('token-expiration') || undefined,
         cloudUrl: core.getInput('cloud-url') || 'https://api.pulumi.com',
