@@ -1,8 +1,8 @@
 # Pulumi GitHub Auth Actions
 
 Pulumi's GitHub Auth Actions automatically generates and exchanges GitHub's 
-OpenID Connect tokens by Pulumi Access Tokens, making them available for 
-your workflows removing the need of hardcoding credentials on your repos.
+OpenID Connect tokens for Pulumi Access Tokens, making them available to 
+your workflows and removing the need to hardcode credentials in your repos.
 
 - [Documentation](https://www.pulumi.com/docs/pulumi-cloud/oidc/client/)
 
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pulumi/auth-actions@v1
+      - uses: pulumi/auth-actions@v2
         with:
           organization: contoso
           requested-token-type: urn:pulumi:token-type:access_token:organization
@@ -35,7 +35,7 @@ jobs:
           stack-name: org-name/stack-name
 ```
 
-> Note that specific permisions are required for the action to be able to request
+> Note that specific permissions are required for the action to be able to request
 > an id-token. For more info see the [GitHub documentation](https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings)
 
 This will check out the existing directory, then fetch a Pulumi access token
