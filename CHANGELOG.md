@@ -2,7 +2,9 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- chore: Remove the immutable-action publish workflow in favor of GitHub's
+  GA Immutable Releases setting
+  ([#61](https://github.com/pulumi/auth-actions/pull/61))
 
 ---
 
