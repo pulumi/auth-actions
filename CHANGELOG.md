@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- fix: Respect `export-environment-variables: false`
+  ([#65](https://github.com/pulumi/auth-actions/issues/65))
 - chore: Remove the immutable-action publish workflow in favor of GitHub's
   GA Immutable Releases setting
   ([#61](https://github.com/pulumi/auth-actions/pull/61))
