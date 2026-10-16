@@ -52706,7 +52706,7 @@ function makeOidcLoginConfig() {
         scope: coreExports.getInput('scope') || undefined,
         expiration: mainExports.getNumberInput('token-expiration') || undefined,
         cloudUrl: coreExports.getInput('cloud-url') || 'https://api.pulumi.com',
-        exportEnvironmentVariables: coreExports.getBooleanInput('export-environment-variables') || true,
+        exportEnvironmentVariables: coreExports.getBooleanInput('export-environment-variables'),
     });
 }
 const main = () => __awaiter(void 0, void 0, void 0, function* () {

@@ -16,8 +16,9 @@ function makeOidcLoginConfig(): rt.Result<OidcLoginConfig> {
     scope: core.getInput('scope') || undefined,
     expiration: getNumberInput('token-expiration') || undefined,
     cloudUrl: core.getInput('cloud-url') || 'https://api.pulumi.com',
-    exportEnvironmentVariables:
-      core.getBooleanInput('export-environment-variables') || true,
+    exportEnvironmentVariables: core.getBooleanInput(
+      'export-environment-variables',
+    ),
   });
 }
 
