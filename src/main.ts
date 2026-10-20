@@ -1,19 +1,30 @@
-import * as rt from 'runtypes';
 import * as core from '@actions/core';
-import { getNumberInput } from 'actions-parsers';
 import {
-  type OidcLoginConfig,
   OidcLoginConfigRuntype,
   ensureAccessToken,
 } from '@pulumi/actions-helpers/auth';
 
-function makeOidcLoginConfig(): rt.Result<OidcLoginConfig> {
+function getNumberInput(name: string): number | undefined {
+  const value = core.getInput(name);
+  if (!value) {
+    return undefined;
+  }
+  const parsed = Number(value);
+  if (Number.isNaN(parsed)) {
+    throw new Error(`Input ${name} was not a number: ${value}`);
+  }
+  return parsed;
+}
+
+function makeOidcLoginConfig() {
   return OidcLoginConfigRuntype.validate({
     organizationName: core.getInput('organization', { required: true }),
     requestedTokenType: core.getInput('requested-token-type', {
       required: true,
     }),
     scope: core.getInput('scope') || undefined,
+    // A token-expiration of 0 means "use the server default".
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     expiration: getNumberInput('token-expiration') || undefined,
     cloudUrl: core.getInput('cloud-url') || 'https://api.pulumi.com',
     exportEnvironmentVariables: core.getBooleanInput(

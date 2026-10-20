@@ -14,8 +14,6 @@ updates:
       interval: 'daily'
     labels:
       - 'impact/no-changelog-required'
-      - 'github_actions'
-      - 'dependencies'
   - package-ecosystem: 'npm'
     directory: '/'
     groups:
@@ -34,5 +32,3 @@ updates:
         versions: ['15.x']
     labels:
       - 'impact/no-changelog-required'
-      - 'javascript'
-      - 'dependencies'

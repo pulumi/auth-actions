@@ -29,7 +29,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js', '**/*.json'],
+    files: ['**/*.js'],
     extends: [tseslint.configs.disableTypeChecked],
   },
   eslintPluginPrettierRecommended,
