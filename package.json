@@ -24,13 +24,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/axios": "^0.14.4",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^26.6.5",
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
+    "@types/axios": "^0.14.4",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.5",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.7",
@@ -45,13 +45,11 @@
     "rollup": "^4.64.7",
     "ts-jest": "^29.4.15",
     "tslib": "^2.8.1",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^7.8.0"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.2"
   },
   "dependencies": {
     "@actions/core": "^3.0.1",
-    "@pulumi/actions-helpers": "^0.1.0",
-    "actions-parsers": "^1.0.2",
-    "runtypes": "^7.0.5"
+    "@pulumi/actions-helpers": "^0.1.0"
   }
 }
