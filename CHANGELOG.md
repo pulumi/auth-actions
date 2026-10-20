@@ -2,6 +2,8 @@
 
 ## HEAD (Unreleased)
 
+- fix: Update `@pulumi/actions-helpers` to 0.2.0
+  ([#84](https://github.com/pulumi/auth-actions/pull/84))
 - fix: Respect `export-environment-variables: false`
   ([#65](https://github.com/pulumi/auth-actions/issues/65))
 - chore: Remove the immutable-action publish workflow in favor of GitHub's
