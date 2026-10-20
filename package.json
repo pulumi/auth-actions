@@ -50,6 +50,6 @@
   },
   "dependencies": {
     "@actions/core": "^3.0.1",
-    "@pulumi/actions-helpers": "^0.1.0"
+    "@pulumi/actions-helpers": "^0.2.0"
   }
 }
