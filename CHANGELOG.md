@@ -2,6 +2,12 @@
 
 ## HEAD (Unreleased)
 
+**(none)**
+
+---
+
+## 2.1.1 (2026-10-22)
+
 - fix: Update `@pulumi/actions-helpers` to 0.2.0
   ([#84](https://github.com/pulumi/auth-actions/pull/84))
 - fix: Respect `export-environment-variables: false`
