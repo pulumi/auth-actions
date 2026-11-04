@@ -2,7 +2,8 @@
 
 ## HEAD (Unreleased)
 
-**(none)**
+- fix: Retry the GitHub OIDC token request up to 3 times
+  ([#92](https://github.com/pulumi/auth-actions/pull/92))
 
 ---
 
