@@ -40,6 +40,7 @@ import require$$5$4 from 'url';
 import require$$1$7 from 'tty';
 import http2 from 'http2';
 import zlib from 'zlib';
+import { setTimeout as setTimeout$1 } from 'node:timers/promises';
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -29694,6 +29695,14 @@ function error(message, properties = {}) {
     issueCommand('error', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 /**
+ * Adds a warning issue
+ * @param message warning issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
+ */
+function warning(message, properties = {}) {
+    issueCommand('warning', toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
+/**
  * Writes info to log with console.log.
  * @param message info message
  */
@@ -53987,8 +53996,24 @@ async function exchangeIdToken(config, audience, subjectToken) {
     }
 }
 
-async function fetchOIDCToken(audience) {
-    return getIDToken(audience);
+const maxAttempts = 3;
+// `core.getIDToken` throws a plain `Error` for every failure, so a transient
+// network error cannot be told apart from an HTTP error. Retry on every failure.
+// See https://github.com/actions/toolkit/issues/2565.
+async function fetchOIDCToken(audience, retryDelayMs = 1000) {
+    for (let attempt = 1;; attempt++) {
+        try {
+            return await getIDToken(audience);
+        }
+        catch (error) {
+            if (attempt >= maxAttempts) {
+                throw error;
+            }
+            const delay = retryDelayMs * 2 ** (attempt - 1);
+            warning(`Attempt ${attempt} of ${maxAttempts} to fetch the OIDC token failed, retrying in ${delay}ms: ${error.message}`);
+            await setTimeout$1(delay);
+        }
+    }
 }
 
 var lib = {};
