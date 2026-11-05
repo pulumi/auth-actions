@@ -5,9 +5,9 @@ issue first. We're happy to talk with you about your pull request before you get
 started.
 
 For larger features, we'd appreciate it if you open a
-[new issue](https://github.com/pulumi/actions/issues/new) before investing a lot
+[new issue](https://github.com/pulumi/auth-actions/issues/new) before investing a lot
 of time so we can discuss the feature together. Please also be sure to browse
-[current issues](https://github.com/pulumi/actions/issues) to make sure your
+[current issues](https://github.com/pulumi/auth-actions/issues) to make sure your
 issue is unique, to lighten the triage burden on our maintainers. Finally,
 please limit your pull requests to contain only one feature at a time.
 Separating feature work into individual pull requests helps speed up code review
@@ -21,7 +21,7 @@ latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
 1. Checkout the default branch.
 
    ```bash
-   $ git checkout master
+   $ git checkout main
    ```
 
 2. Open up `CHANGELOG.md`. Create a new h2 with the release version and the date
@@ -48,24 +48,31 @@ latest release is `v3.18.1`, and you wish to cut `v.3.19.0`.
    ...
    ```
 
-3. Commit your changes to `CHANGELOG.md`, and open a PR. Once your changes have
-   been approved and status checks have passed, merge your PR into the default
-   branch, `master`.
+3. Set the package version and rebuild `dist/`.
 
-4. Wait for status checks on the default branch to pass.
+   ```bash
+   $ npm version 3.19.0 --no-git-tag-version && npm run build
+   ```
 
-5. Navigate to the [Release page](https://github.com/pulumi/actions/releases)
-   and select `Draft a new release`.
+4. Commit your changes, and open a PR. Once your changes have been approved and
+   status checks have passed, merge your PR into the default branch, `main`.
 
-6. Make sure `Publish this Action to GitHub Marketplace` is checked (it should
-   be checked by default).
+5. Wait for status checks on the default branch to pass.
 
-7. Under the `Choose a tag` dropdown, enter in the name of your new tag, which
-   should the release name, `v3.19.0`.
+6. Navigate to the
+   [Release page](https://github.com/pulumi/auth-actions/releases) and draft a
+   new release:
 
-8. Under `Release Title`, enter the name of your release, v3.19.0
+   - Make sure `Publish this Action to GitHub Marketplace` is checked (it should
+     be checked by default).
+   - Under the `Choose a tag` dropdown, enter in the name of your new tag,
+     `v3.19.0`.
+   - Under `Release Title`, enter the name of your release, `v3.19.0`.
+   - Press the button `Generate release notes`. Replace the section
+     `What's Changed` with the changes you added to `CHANGELOG.md`.
 
-9. Press the button `Geneate release notes`. Replace the section `What's New`
-   with the changes you added to `CHANGELOG.md`.
+7. Check the tag, then press the `Publish release` button. This repository uses
+   immutable releases, so you cannot change the tag of a published release.
 
-10. Press the `Publish release` button.
+8. Make sure the major version tag (`v3`) points to the new release. The
+   `tag.yaml` workflow moves it when the release is published.
