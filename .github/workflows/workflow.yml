@@ -25,6 +25,14 @@ jobs:
 
       - run: npm run build
 
+      - name: Check that dist is up to date
+        run: |
+          if [ -n "$(git status --porcelain -- dist/)" ]; then
+            git status --short -- dist/
+            echo "::error::dist/ is out of date. Run 'npm run build' and commit the result."
+            exit 1
+          fi
+
       - uses: dorny/paths-filter@v4
         id: changes
         with:
